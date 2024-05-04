@@ -12,7 +12,7 @@ from tqdm import tqdm
 # gitee的下载地址需要把blob改成raw
 TMP_PATH = './tmp'
 GET_PYTHON_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/python-3.9.13-embed-amd64.zip'
-REPO_URL_HTTP = 'https://gitee.com/pur1fy/blue_archive_auto_script.git'
+REPO_URL_HTTP = 'https://github.com/sage417/blue_archive_auto_script.git'
 GIT_HOME = './toolkit/Git/bin/git.exe'
 GET_PIP_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/get-pip.py'
 GET_ATX_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/ATX.apk'
@@ -109,7 +109,7 @@ def check_onnxruntime():
 
 
 def start_app():
-    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', './window.py'],)).start()
+    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', LOCAL_PATH +'/window.py'],)).start()
 
 
 def run_app():
@@ -163,8 +163,8 @@ def check_git():
         logger.info("+--------------------------------+")
         logger.info("|         INSTALL BAAS           |")
         logger.info("+--------------------------------+")
-        subprocess.run([GIT_HOME, 'clone', '--depth', '1', REPO_URL_HTTP])
-        mv_repo(LOCAL_PATH)
+        subprocess.run([GIT_HOME, 'clone', '--depth', '1', '-b', 'winocr', REPO_URL_HTTP])
+        # mv_repo(LOCAL_PATH)
         logger.info("Install success")
     elif not os.path.exists('./no_update'):
         logger.info("+--------------------------------+")
