@@ -13,10 +13,11 @@ class Layout(QWidget):
         self.setFixedHeight(120)
         self.info_widget = self.parent()
         self.hBoxLayout = QVBoxLayout(self)
-        self.lay_1 = QHBoxLayout(self)
-        self.lay_2 = QHBoxLayout(self)
+        self.lay_1 = QHBoxLayout()
+        self.lay_2 = QHBoxLayout()
         self.label_1 = QLabel(self.tr('输入你需要对手比你低几级，高几级则填负数：'), self)
         self.label_2 = QLabel(self.tr('输入你最多需要刷新几次：'), self)
+
         self.input_1 = LineEdit(self)
         self.input_2 = LineEdit(self)
         self.accept_1 = QPushButton(self.tr('确定'), self)

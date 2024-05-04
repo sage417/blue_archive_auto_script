@@ -1,6 +1,6 @@
 import time
 import cv2
-from cnocr import CnOcr
+# from cnocr import CnOcr
 
 
 class Baas_ocr:
@@ -35,33 +35,26 @@ class Baas_ocr:
 
     def init_ENocr(self):
         if self.ocrEN is None:
-            self.ocrEN = CnOcr(det_model_name="en_PP-OCRv3_det",
-                               det_model_fp='src/ocr_models/en_PP-OCRv3_det_infer.onnx',
-                               rec_model_name='en_number_mobile_v2.0',
-                               rec_model_fp='src/ocr_models/en_number_mobile_v2.0_rec_infer.onnx', )
+            from core.ocr.en_ocr import WINOCR_EN
+            self.ocrEN = WINOCR_EN()
             img_EN = cv2.imread('src/test_ocr/EN.png')
-            self.logger.info("Test ocrEN : " + self.ocrEN.ocr_for_single_line(img_EN)['text'])
+            self.logger.info("Test ocrEN : " + self.ocrEN.ocr_for_single_line(img_EN)['merged_text'])
         return True
 
     def init_CNocr(self):
         if self.ocrCN is None:
-            self.ocrCN = CnOcr(det_model_name='ch_PP-OCRv3_det',
-                               det_model_fp='src/ocr_models/ch_PP-OCRv3_det_infer.onnx',
-                               rec_model_name='densenet_lite_114-fc',
-                               rec_model_fp='src/ocr_models/cn_densenet_lite_136.onnx')
+            from core.ocr.cn_ocr import WINOCR_CN
+            self.ocrCN = WINOCR_CN()
             img_CN = cv2.imread('src/test_ocr/CN.png')
-            self.logger.info("Test ocrCN : " + self.ocrCN.ocr_for_single_line(img_CN)['text'])
+            self.logger.info("Test ocrCN : " + self.ocrCN.ocr_for_single_line(img_CN)['merged_text'])
         return True
 
     def init_NUMocr(self):
         if self.ocrNUM is None:
-            self.ocrNUM = CnOcr(det_model_name='en_PP-OCRv3_det',
-                                det_model_fp='src/ocr_models/en_PP-OCRv3_det_infer.onnx',
-                                rec_model_name='number-densenet_lite_136-fc',
-                                rec_model_fp='src/ocr_models/number-densenet_lite_136.onnx')
-
+            from core.ocr.cn_ocr import WINOCR_CN
+            self.ocrNUM = WINOCR_CN()
             img_NUM = cv2.imread('src/test_ocr/NUM.png')
-            self.logger.info("Test ocrNUM : " + self.ocrNUM.ocr_for_single_line(img_NUM)['text'])
+            self.logger.info("Test ocrNUM : " + self.ocrNUM.ocr_for_single_line(img_NUM)['merged_text'])
         return True
 
     def init_JPocr(self):

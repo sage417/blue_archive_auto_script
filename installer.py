@@ -12,7 +12,8 @@ from tqdm import tqdm
 # gitee的下载地址需要把blob改成raw
 TMP_PATH = './tmp'
 GET_PYTHON_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/python-3.9.13-embed-amd64.zip'
-REPO_URL_HTTP = 'https://gitee.com/pur1fy/blue_archive_auto_script.git'
+REPO_URL_HTTP = 'https://github.com/sage417/blue_archive_auto_script.git'
+REPO_BRANCH = 'winocr'
 GIT_HOME = './toolkit/Git/bin/git.exe'
 GET_PIP_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/get-pip.py'
 GET_ATX_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/ATX.apk'
@@ -65,7 +66,7 @@ def install_package():
             ["./lib/python.exe", '-m', 'pip', 'install', 'virtualenv', '-i', 'https://pypi.tuna.tsinghua.edu.cn/simple',
              '--no-warn-script-location'])
         subprocess.run(["./lib/python.exe", '-m', 'virtualenv', 'env'])
-        subprocess.run(["./env/Scripts/python", '-m', 'pip', 'install', '-r', './requirements.txt', '-i',
+        subprocess.run(["./env/Scripts/python", '-m', 'pip', 'install', '-r', LOCAL_PATH + '/requirements.txt', '-i',
                         'https://pypi.tuna.tsinghua.edu.cn/simple', '--no-warn-script-location'])
     except Exception as e:
         raise Exception("Install requirements failed")
@@ -109,7 +110,7 @@ def check_onnxruntime():
 
 
 def start_app():
-    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', './window.py'],)).start()
+    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', './window.py'],),kwargs={'cwd':LOCAL_PATH}).start()
 
 
 def run_app():
@@ -152,38 +153,38 @@ def check_python():
 
 def check_atx():
     logger.info("Checking atx-agent...")
-    if not os.path.exists('src/atx_app/ATX.apk'):
+    if not os.path.exists(LOCAL_PATH + 'src/atx_app/ATX.apk'):
         logger.info("Downloading atx-agent...")
         download_file(GET_ATX_URL)
 
 
 def check_git():
     logger.info("Checking git installation...")
-    if not os.path.exists('./.git'):
+    if not os.path.exists(LOCAL_PATH + '/.git'):
         logger.info("+--------------------------------+")
         logger.info("|         INSTALL BAAS           |")
         logger.info("+--------------------------------+")
-        subprocess.run([GIT_HOME, 'clone', '--depth', '1', REPO_URL_HTTP])
-        mv_repo(LOCAL_PATH)
+        subprocess.run([GIT_HOME, 'clone', '--depth', '1', '-b', REPO_BRANCH, REPO_URL_HTTP])
+        # mv_repo(LOCAL_PATH)
         logger.info("Install success")
     elif not os.path.exists('./no_update'):
         logger.info("+--------------------------------+")
         logger.info("|          UPDATE BAAS           |")
         logger.info("+--------------------------------+")
-        remote_sha = (subprocess.check_output([GIT_HOME, 'ls-remote', '--heads', 'origin', 'refs/heads/master'])
+        remote_sha = (subprocess.check_output([GIT_HOME, 'ls-remote', '--heads', 'origin', 'refs/heads/' + REPO_BRANCH], cwd = LOCAL_PATH)
                       .decode('utf-8')).split('\t')[0]
-        local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'])
+        local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'], cwd = LOCAL_PATH)
                      .decode('utf-8')).split('\n')[0]
         logger.info(f"remote_sha:{remote_sha}")
         logger.info(f"local_sha:{local_sha}")
-        if local_sha == remote_sha and subprocess.check_output([GIT_HOME, 'diff']) == b'':
+        if local_sha == remote_sha and subprocess.check_output([GIT_HOME, 'diff'], cwd = LOCAL_PATH) == b'':
             logger.info("No updates available")
         else:
             logger.info("Pulling updates from the remote repository...")
-            subprocess.run([GIT_HOME, 'reset', '--hard', 'HEAD'])
-            subprocess.run([GIT_HOME, 'pull', REPO_URL_HTTP])
+            subprocess.run([GIT_HOME, 'reset', '--hard', 'HEAD'], cwd = LOCAL_PATH)
+            subprocess.run([GIT_HOME, 'pull', REPO_URL_HTTP], cwd = LOCAL_PATH)
 
-            updated_local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'])
+            updated_local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'], cwd = LOCAL_PATH)
                                  .decode('utf-8')).split('\n')[0]
             if updated_local_sha == remote_sha:
                 logger.info("Update success")
@@ -201,8 +202,8 @@ def create_tmp():
 def clear_tmp():
     if os.path.exists(TMP_PATH):
         shutil.rmtree(TMP_PATH)
-    if os.path.exists(LOCAL_PATH):
-        shutil.rmtree(LOCAL_PATH)
+    # if os.path.exists(LOCAL_PATH):
+    #     shutil.rmtree(LOCAL_PATH)
 
 
 def check_install():

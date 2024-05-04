@@ -137,7 +137,7 @@ class Baas_thread:
         if not self.flag_run:
             return False
         self.latest_screenshot_time = time.time()
-        img = cv2.cvtColor(np.array(self.connection.screenshot()), cv2.COLOR_RGB2BGR)
+        img = self.connection.screenshot(format="opencv")
         return img
 
     def screenshot_worker_thread(self):
@@ -569,11 +569,11 @@ class Baas_thread:
 
     def get_creditpoints(self):
         region = {
-            'CN': [769, 10, 896, 40],
-            'Global': [769, 10, 896, 40],
-            'JP': [769, 10, 896, 40],
+            'CN': [769, 10, 900, 40],
+            'Global': [769, 10, 900, 40],
+            'JP': [769, 10, 900, 40],
         }
-        _ocr_res = self.ocr.get_region_res(self.latest_img_array, region[self.server], 'Global', self.ratio)
+        _ocr_res = self.ocr.get_region_res(self.latest_img_array, region[self.server], 'NUM', self.ratio)
         temp = 0
         for j in range(0, len(_ocr_res)):
             if not _ocr_res[j].isdigit():

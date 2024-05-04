@@ -1,5 +1,5 @@
 import os
-from win11toast import notify as _notify
+# from win11toast import notify as _notify
 
 app_id = 'BlueArchiveAutoScript.exe'
 icon_path = '/gui/assets/logo.png'

@@ -10,7 +10,7 @@ class Layout(QWidget):
         super().__init__(parent=parent)
         self.config = config
         self.default_goods = self.config.static_config['common_shop_price_list'][self.config.server_mode]
-        print(len(self.default_goods))
+        # print(len(self.default_goods))
         self.__check_server()
         self.goods = self.config.get(key='CommonShopList')
 
@@ -26,7 +26,7 @@ class Layout(QWidget):
         self.label.setFixedWidth(160)
         self.input = LineEdit(self)
         self.input.setValidator(QIntValidator(0, 5))
-        print(self.config.get('CommonShopRefreshTime'))
+        # print(self.config.get('CommonShopRefreshTime'))
         self.input.setText(str(self.config.get('CommonShopRefreshTime')))
         self.accept = QPushButton(self.tr('确定'), self)
         self.boxes = []
@@ -43,7 +43,7 @@ class Layout(QWidget):
             price_label = QLabel(price_text, self)
             price_label.setFixedWidth(150)
             wrapper_widget = QWidget()
-            VLayout = QVBoxLayout(self)
+            VLayout = QVBoxLayout()
             VLayout.addWidget(ccs)
             VLayout.addWidget(price_label)
             wrapper = QHBoxLayout()
