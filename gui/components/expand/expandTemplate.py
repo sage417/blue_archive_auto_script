@@ -43,7 +43,7 @@ class TemplateLayout(QWidget):
         for ind, cfg in enumerate(configItems):
             confirmButton = None
             selectButton = None
-            optionPanel = QHBoxLayout(self)
+            optionPanel = QHBoxLayout()
             labelComponent = QLabel(cfg.label, self)
             optionPanel.addWidget(labelComponent, 0, Qt.AlignLeft)
             optionPanel.addStretch(1)

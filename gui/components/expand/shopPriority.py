@@ -41,7 +41,7 @@ class Layout(QWidget):
             price_label = QLabel(price_text, self)
             price_label.setFixedWidth(150)
             wrapper_widget = QWidget()
-            VLayout = QVBoxLayout(self)
+            VLayout = QVBoxLayout()
             VLayout.addWidget(ccs)
             VLayout.addWidget(price_label)
             wrapper = QHBoxLayout()
