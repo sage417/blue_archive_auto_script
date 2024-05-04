@@ -65,7 +65,7 @@ def install_package():
             ["./lib/python.exe", '-m', 'pip', 'install', 'virtualenv', '-i', 'https://pypi.tuna.tsinghua.edu.cn/simple',
              '--no-warn-script-location'])
         subprocess.run(["./lib/python.exe", '-m', 'virtualenv', 'env'])
-        subprocess.run(["./env/Scripts/python", '-m', 'pip', 'install', '-r', './requirements.txt', '-i',
+        subprocess.run(["./env/Scripts/python", '-m', 'pip', 'install', '-r', LOCAL_PATH + '/requirements.txt', '-i',
                         'https://pypi.tuna.tsinghua.edu.cn/simple', '--no-warn-script-location'])
     except Exception as e:
         raise Exception("Install requirements failed")
@@ -109,7 +109,7 @@ def check_onnxruntime():
 
 
 def start_app():
-    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', LOCAL_PATH +'/window.py'],)).start()
+    threading.Thread(target=subprocess.Popen, args=(['./env/Scripts/pythonw', './window.py'],),kwargs={'cwd':LOCAL_PATH}).start()
 
 
 def run_app():
@@ -152,7 +152,7 @@ def check_python():
 
 def check_atx():
     logger.info("Checking atx-agent...")
-    if not os.path.exists('./ATX.apk'):
+    if not os.path.exists(LOCAL_PATH +'/ATX.apk'):
         logger.info("Downloading atx-agent...")
         download_file(GET_ATX_URL)
 
@@ -201,8 +201,8 @@ def create_tmp():
 def clear_tmp():
     if os.path.exists(TMP_PATH):
         shutil.rmtree(TMP_PATH)
-    if os.path.exists(LOCAL_PATH):
-        shutil.rmtree(LOCAL_PATH)
+    # if os.path.exists(LOCAL_PATH):
+    #     shutil.rmtree(LOCAL_PATH)
 
 
 def check_install():
