@@ -13,6 +13,7 @@ from tqdm import tqdm
 TMP_PATH = './tmp'
 GET_PYTHON_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/python-3.9.13-embed-amd64.zip'
 REPO_URL_HTTP = 'https://github.com/sage417/blue_archive_auto_script.git'
+REPO_BRANCH = 'winocr'
 GIT_HOME = './toolkit/Git/bin/git.exe'
 GET_PIP_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/get-pip.py'
 GET_ATX_URL = 'https://gitee.com/pur1fy/blue_archive_auto_script_assets/raw/master/ATX.apk'
@@ -159,31 +160,31 @@ def check_atx():
 
 def check_git():
     logger.info("Checking git installation...")
-    if not os.path.exists('./.git'):
+    if not os.path.exists(LOCAL_PATH + '/.git'):
         logger.info("+--------------------------------+")
         logger.info("|         INSTALL BAAS           |")
         logger.info("+--------------------------------+")
-        subprocess.run([GIT_HOME, 'clone', '--depth', '1', '-b', 'winocr', REPO_URL_HTTP])
+        subprocess.run([GIT_HOME, 'clone', '--depth', '1', '-b', REPO_BRANCH, REPO_URL_HTTP])
         # mv_repo(LOCAL_PATH)
         logger.info("Install success")
     elif not os.path.exists('./no_update'):
         logger.info("+--------------------------------+")
         logger.info("|          UPDATE BAAS           |")
         logger.info("+--------------------------------+")
-        remote_sha = (subprocess.check_output([GIT_HOME, 'ls-remote', '--heads', 'origin', 'refs/heads/master'])
+        remote_sha = (subprocess.check_output([GIT_HOME, 'ls-remote', '--heads', 'origin', 'refs/heads/' + REPO_BRANCH], cwd = LOCAL_PATH)
                       .decode('utf-8')).split('\t')[0]
-        local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'])
+        local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'], cwd = LOCAL_PATH)
                      .decode('utf-8')).split('\n')[0]
         logger.info(f"remote_sha:{remote_sha}")
         logger.info(f"local_sha:{local_sha}")
-        if local_sha == remote_sha and subprocess.check_output([GIT_HOME, 'diff']) == b'':
+        if local_sha == remote_sha and subprocess.check_output([GIT_HOME, 'diff'], cwd = LOCAL_PATH) == b'':
             logger.info("No updates available")
         else:
             logger.info("Pulling updates from the remote repository...")
-            subprocess.run([GIT_HOME, 'reset', '--hard', 'HEAD'])
-            subprocess.run([GIT_HOME, 'pull', REPO_URL_HTTP])
+            subprocess.run([GIT_HOME, 'reset', '--hard', 'HEAD'], cwd = LOCAL_PATH)
+            subprocess.run([GIT_HOME, 'pull', REPO_URL_HTTP], cwd = LOCAL_PATH)
 
-            updated_local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'])
+            updated_local_sha = (subprocess.check_output([GIT_HOME, 'rev-parse', 'HEAD'], cwd = LOCAL_PATH)
                                  .decode('utf-8')).split('\n')[0]
             if updated_local_sha == remote_sha:
                 logger.info("Update success")
