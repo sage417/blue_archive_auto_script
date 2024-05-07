@@ -37,21 +37,24 @@ class Baas_ocr:
         if self.ocrEN is None:
             from core.ocr.en_ocr import WINOCR_EN
             self.ocrEN = WINOCR_EN()
-            self.logger.info("Test ocrEN : " + self.ocrEN.ocr_for_single_line('src/test_ocr/EN.png'))
+            img_EN = cv2.imread('src/test_ocr/EN.png')
+            self.logger.info("Test ocrEN : " + self.ocrEN.ocr_for_single_line(img_EN)['merged_text'])
         return True
 
     def init_CNocr(self):
         if self.ocrCN is None:
             from core.ocr.cn_ocr import WINOCR_CN
             self.ocrCN = WINOCR_CN()
-            self.logger.info("Test ocrCN : " + self.ocrCN.ocr_for_single_line('src/test_ocr/CN.png'))
+            img_CN = cv2.imread('src/test_ocr/CN.png')
+            self.logger.info("Test ocrCN : " + self.ocrCN.ocr_for_single_line(img_CN)['merged_text'])
         return True
 
     def init_NUMocr(self):
         if self.ocrNUM is None:
             from core.ocr.cn_ocr import WINOCR_CN
             self.ocrNUM = WINOCR_CN()
-            self.logger.info("Test ocrNUM : " + self.ocrNUM.ocr_for_single_line('src/test_ocr/NUM.png'))
+            img_NUM = cv2.imread('src/test_ocr/NUM.png')
+            self.logger.info("Test ocrNUM : " + self.ocrNUM.ocr_for_single_line(img_NUM)['merged_text'])
         return True
 
     def init_JPocr(self):

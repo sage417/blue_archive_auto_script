@@ -4,7 +4,7 @@ numpy
 flask
 win11toast
 adbutils
-uiautomator2
+uiautomator2==3.0.2
 opencv-python
 psutil
 winrt.windows.foundation
