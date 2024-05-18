@@ -80,7 +80,7 @@ class HomeFragment(QFrame):
 
         self.bottomLayout = QHBoxLayout()
         self.label_update = QLabel(self)
-        self.column_2 = QVBoxLayout(self)
+        self.column_2 = QVBoxLayout()
         self.label_logger = QLabel(self)
         self.logger_box = TextEdit(self)
         self.logger_box.setReadOnly(True)
